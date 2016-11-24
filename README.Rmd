@@ -14,10 +14,23 @@ knitr::opts_chunk$set(
 
 # platforms
 
-All Saccharomyces cerevisiae experimental platforms in the public dabases:
-1. Gene Expression Omnibus (GEO) [cite: https://doi.org/10.1093/nar/gks1193]
-2. Array Express (AE) [cite: https://doi.org/10.1093/nar/gku1057]
+All Saccharomyces cerevisiae experimental platforms in the public dabases:  
+1. Gene Expression Omnibus (GEO) [cite: https://doi.org/10.1093/nar/gks1193]  
+2. Array Express (AE) [cite: https://doi.org/10.1093/nar/gku1057]  
 
+AE imports arrays and experiments from GEO. However not all of them make it and some 
+platforms exist in AE that don't in GEO (the two sets don't overlap completely). For
+this reason I try to assign a `scer_uid` to each unique platform in the superset, 
+mapping mismatched GEO <-> AE accessions in the meantime. 
+
+The second problem is that the same physical array design is present under multiple
+accessions within GEO or AE. I want to clean this up so that each `scer_uid` represents
+the superset of all GEO/AE platforms that belong to the same physical array design.
+
+To this end:  
+* `01`-`04` I retrieve all indidual scer platforms from GEO and AE and combine 
+them into `scer-platforms-geo-and-ae.csv`.  
+* `05` tidies platforms manufactured by affymetrix. [IN PROGRESS] 
 
 
 ### how pkg was created
@@ -32,6 +45,7 @@ Rscript -e 'devtools::create("platforms")'
 Next steps:
 
 ```r
+library(devtools)
 use_readme_rmd()
 use_data_raw()
 ```
