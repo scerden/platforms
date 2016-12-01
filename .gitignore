@@ -1,6 +1,4 @@
 .Rproj.user
 .Rhistory
 .RData
-data-raw/tmp/*
-data-raw/*.csv
-data-raw/*.csv.gz
+data-raw2/*

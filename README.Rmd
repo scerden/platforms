@@ -28,8 +28,8 @@ accessions within GEO or AE. I want to clean this up so that each `scer_uid` rep
 the superset of all GEO/AE platforms that belong to the same physical array design.
 
 To this end:  
-* `01`-`04` I retrieve all indidual scer platforms from GEO and AE and combine 
-them into `scer-platforms-geo-and-ae.csv`.  
+* `04` I retrieve all indidual scer platforms from GEO and AE and combine 
+them into `scer-platforms-geo-and-ae.csv.gz`.  
 * `05` tidies platforms manufactured by affymetrix. [IN PROGRESS]  
 * `99` query for all samples that match "topo/top1/top2" or similar and retrieve 
 platforms and series that contain them.  
@@ -50,6 +50,7 @@ Next steps:
 library(devtools)
 use_readme_rmd()
 use_data_raw()
+use_testthat()
 ```
 
 numbered rscripts to create main platforms tbl

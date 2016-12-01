@@ -1,0 +1,8 @@
+default:
+  cdf: rikDACF.cdf
+  probetab: rikDACF_probeSequences.txt
+  cel: GSM86378_1.CEL
+  gpl:
+  - GPL347
+  - GPL3235
+  - GPL3722

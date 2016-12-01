@@ -4,9 +4,10 @@ library(rvest)
 library(stringr)
 
 # load data ---------------------------------------------------------------
-
+library(scerden.geometadb)
+library(scerden.aemetadb)
 ## from GEO
-metagpl <- read_csv("data-raw/2016-11-13_scer_GEOmetadb-gpl.csv.gz")
+metagpl <- scerden.geometadb::gpl
 gpl_tbl <- metagpl %>%
   transmute(uid = ID,
             gpl_accession = gpl,
@@ -14,7 +15,7 @@ gpl_tbl <- metagpl %>%
             gpl_acc = stringr::str_extract(gpl_accession, "\\d+$"))
 
 ## ArrayExpress data
-metaae <- read_csv("data-raw/2016-11-23_scer_AE-arrays.csv.gz")
+metaae <- scerden.aemetadb::ae_arrays
 ae_tbl <- metaae %>%
   transmute(ae_accession = accession,
             ae_title = name,
@@ -34,10 +35,6 @@ ae_only <- ae_tbl %>%
   filter(!ae_accession %in% maptbl$ae_accession) %>%
   rename(title = ae_title) %>%
   select(title, ae_accession)
-## for some reason there is an empty line at the bottom from parsing
-tail(ae_only)
-ae_only <- head(ae_only, -1)
-tail(ae_only)
 
 # Manual recoding unmatched ae --------------------------------------------
 
@@ -101,8 +98,7 @@ x <- maptbl %>%
   transmute(geometa_uid = uid,
             gpl = gpl_accession,
             ae = ae_accession,
-            gpl_title = title
-            )
+            gpl_title = title)
 y <- ae_affy %>%
   transmute(gpl = gpl_accession,
             ae = ae_accession,
@@ -135,5 +131,8 @@ combined_tbl <- metagpl %>%
   select(-ID, -title) %>%
   left_join(combined_tbl, ., by = c("geo" = "gpl"))
 
-
-write_csv(combined_tbl, "data-raw/scer-platforms-geo-and-ae.csv")
+if(!dir.exists("inst/extdata")) {
+  dir.create("inst/extdata", recursive = T)
+}
+write_csv(combined_tbl, "inst/extdata/scer-platforms-geo-and-ae.csv")
+R.utils::gzip("inst/extdata/scer-platforms-geo-and-ae.csv")
